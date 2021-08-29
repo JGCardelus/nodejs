@@ -1,10 +1,9 @@
-const http = require('http');
 const fs = require('fs');
 
-const server = http.createServer((request, response) => {
+const requestHandler = (request, response) => {
 	const url = request.url;
 	const method = request.method;
-
+	
 	if (url === '/form-test') {
 		// Creating the response
 		response.setHeader("Content-Type", "text/html");
@@ -20,7 +19,7 @@ const server = http.createServer((request, response) => {
 			</body>
 		</html>
 		`);
-
+	
 		// We return the function so no more code is executed
 		return response.end();
 		// If we keep executing code and access
@@ -34,7 +33,7 @@ const server = http.createServer((request, response) => {
 		request.on("data", (chunk) =>  {
 			body.push(chunk);
 		});
-
+	
 		// Node has parsed all the request
 		request.on("end", () => {
 			// We concatenate all the body-chunks in a string
@@ -44,7 +43,7 @@ const server = http.createServer((request, response) => {
 			// Save in file
 			fs.writeFileSync("test-form-value", text);
 		});
-
+	
 		// Tell the browser we want to redirect the client
 		// And where to
 		response.statusCode = 302;
@@ -60,10 +59,12 @@ const server = http.createServer((request, response) => {
 			</body>
 		</html>
 		`);
-
+	
 		// We return the function so no more code is executed
 		return response.end();
 	}
-});
+}
 
-server.listen(8000);
+// HOW TO EXPORT
+// Method: 1
+module.exports = requestHandler;
